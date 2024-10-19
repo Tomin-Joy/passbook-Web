@@ -32,6 +32,17 @@ import { Transaction } from '../models/transaction';
 
         <form (ngSubmit)="onSubmit()" class="p-6 space-y-4">
           <div>
+            <label class="block text-sm font-medium text-gray-700">Type</label>
+            <select [(ngModel)]="type" name="type"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+              <option value="lend">Lend</option>
+              <option value="borrow">Borrow</option>
+            </select>
+          </div>
+
+          <div>
             <label class="block text-sm font-medium text-gray-700">Description</label>
             <input type="text" [(ngModel)]="description" name="description"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
@@ -45,16 +56,9 @@ import { Transaction } from '../models/transaction';
 
           <div>
             <label class="block text-sm font-medium text-gray-700">Category</label>
-            <input type="text" [(ngModel)]="category" name="category"
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Type</label>
-            <select [(ngModel)]="type" name="type"
+            <select [(ngModel)]="category" name="category"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-              <option value="income">Income</option>
-              <option value="expense">Expense</option>
+              <option *ngFor="let cat of getCategories()" [value]="cat">{{ cat }}</option>
             </select>
           </div>
 
@@ -80,7 +84,18 @@ export class AddTransactionComponent {
   description = '';
   amount = 0;
   category = '';
-  type: 'income' | 'expense' = 'expense';
+  type: 'income' | 'expense' | 'lend' | 'borrow' = 'expense';
+
+  private categoryMap = {
+    income: ['Salary', 'Freelance', 'Investment', 'Gift', 'Other'],
+    expense: ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment', 'Other'],
+    lend: ['Friend', 'Family', 'Colleague', 'Other'],
+    borrow: ['Friend', 'Family', 'Bank', 'Other']
+  };
+
+  getCategories(): string[] {
+    return this.categoryMap[this.type] || [];
+  }
 
   onSubmit() {
     const transaction: Transaction = {
