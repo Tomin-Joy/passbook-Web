@@ -7,8 +7,8 @@ import { Transaction } from '../models/transaction';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="space-y-4">
-      <div *ngFor="let transaction of transactions" 
+    <div class="space-y-4 mb-32">
+      <div *ngFor="let transaction of filteredTransactions" 
            class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
         <div class="flex justify-between items-center">
           <div>
@@ -41,4 +41,12 @@ import { Transaction } from '../models/transaction';
 })
 export class TransactionListComponent {
   @Input() transactions: Transaction[] = [];
+  @Input() activeFilter: string = 'all';
+
+  get filteredTransactions(): Transaction[] {
+    if (this.activeFilter === 'all') {
+      return this.transactions;
+    }
+    return this.transactions.filter(t => t.type === this.activeFilter);
+  }
 }

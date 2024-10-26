@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Transaction } from './app/models/transaction';
 import { TransactionListComponent } from './app/components/transaction-list.component';
 import { AddTransactionComponent } from './app/components/add-transaction.component';
+import { FilterBarComponent } from './app/components/filter-bar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, TransactionListComponent, AddTransactionComponent],
+  imports: [CommonModule, TransactionListComponent, AddTransactionComponent, FilterBarComponent],
   template: `
     <div class="min-h-screen bg-gray-50 py-8">
       <div class="max-w-4xl mx-auto px-4">
@@ -32,8 +33,16 @@ import { AddTransactionComponent } from './app/components/add-transaction.compon
           </div>
         </div>
         
-        <app-transaction-list [transactions]="transactions"></app-transaction-list>
-        <app-add-transaction (addTransaction)="onAddTransaction($event)"></app-add-transaction>
+        <app-transaction-list 
+          [transactions]="transactions"
+          [activeFilter]="activeFilter">
+        </app-transaction-list>
+        <app-add-transaction 
+          (addTransaction)="onAddTransaction($event)">
+        </app-add-transaction>
+        <app-filter-bar
+          (filterChange)="onFilterChange($event)">
+        </app-filter-bar>
       </div>
     </div>
   `
@@ -42,10 +51,15 @@ export class App {
   transactions: Transaction[] = [];
   balance = 0;
   netWorth = 0;
+  activeFilter = 'all';
 
   onAddTransaction(transaction: Transaction) {
     this.transactions = [transaction, ...this.transactions];
     this.updateBalances();
+  }
+
+  onFilterChange(filter: string) {
+    this.activeFilter = filter;
   }
 
   private updateBalances() {
