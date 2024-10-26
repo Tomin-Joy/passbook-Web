@@ -78,7 +78,7 @@ export class AuthComponent {
       }
       this.resetForm();
     } catch (error) {
-      this.error = error.message;
+      this.error = error as string;
     }
   }
 
