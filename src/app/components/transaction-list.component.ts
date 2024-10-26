@@ -1,8 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Transaction } from '../models/transaction';
-import { generate } from 'rxjs';
-import { generateSampleTransactions } from '../random_generators/transactions';
 
 @Component({
   selector: "app-transaction-list",
@@ -57,11 +55,7 @@ export class TransactionListComponent {
   @Input() transactions: Transaction[] = [];
   @Input() activeFilter: string = "all";
 
-  ngOnInit(): void {
-    if (!this.transactions || this.transactions.length === 0) {
-      this.transactions = generateSampleTransactions();
-    }
-  }
+  
 
   get filteredTransactions(): Transaction[] {
     if (this.activeFilter === "all") {
